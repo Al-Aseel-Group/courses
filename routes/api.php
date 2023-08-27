@@ -38,4 +38,5 @@ Route::apiResource('course',CourseController::class);
 Route::apiResource('teacher',TeacherController::class);
 
 Route::post('teacher/{teacher_id}/skill',[TeacherSkillController::class,'store']);
+Route::delete('teacher/{teacher_id}/skill/{skill_id}',[TeacherSkillController::class,'destroy']);
 

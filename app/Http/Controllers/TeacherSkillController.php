@@ -57,8 +57,12 @@ class TeacherSkillController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($teacherId,$skillId)
     {
-        //
+        $skill = TeacherSkill::where('teacher_id',$teacherId)->where('id',$skillId)->firstOrFail();
+        $skill->delete();
+        return response()->json([
+            'message'=>'skill deleted'
+        ]);
     }
 }
