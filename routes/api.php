@@ -5,6 +5,7 @@ use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeacherSkillController;
 use Illuminate\Support\Facades\Http;
 
 /*
@@ -35,4 +36,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('student',StudentController::class);
 Route::apiResource('course',CourseController::class);
 Route::apiResource('teacher',TeacherController::class);
+
+Route::post('teacher/{teacher_id}/skill',[TeacherSkillController::class,'store']);
 
