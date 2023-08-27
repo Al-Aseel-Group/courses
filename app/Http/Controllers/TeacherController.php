@@ -40,7 +40,7 @@ class TeacherController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         return response()->json([
-            'data'=>$teacher
+            'data'=>$teacher->load('skills')
         ]);
     }
 

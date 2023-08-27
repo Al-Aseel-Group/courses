@@ -26,11 +26,12 @@ class TeacherSkillController extends Controller
 
         $teacher = Teacher::findOrFail($teacherId);
 
+        $teacher->skills()->create($input);
 
-        TeacherSkill::create([
-            'name'=>$input['name'],
-            'teacher_id'=>$teacher->id
-        ]);
+        // TeacherSkill::create([
+        //     'name'=>$input['name'],
+        //     'teacher_id'=>$teacher->id
+        // ]);
 
         return response()->json([
             'message'=>'skill been added'

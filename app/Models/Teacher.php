@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Teacher extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
         'name'
     ];
+
+    public function skills()
+    {
+        return $this->hasMany(TeacherSkill::class);
+    }
 }
