@@ -41,4 +41,3 @@ Route::post('teacher/{teacher_id}/skill',[TeacherSkillController::class,'store']
 Route::delete('teacher/{teacher_id}/skill/{skill_id}',[TeacherSkillController::class,'destroy']);
 
 
-// Hello
