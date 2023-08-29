@@ -1,67 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Course Steps
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Steps to make a new CRUD:
+* Create a new project with this command `composer create-project --prefer-dist laravel/laravel <name>`, this will create a new project with the name you choose.
 
-## About Laravel
+* Create a Controller with this command `php artisan make:controller <name>Controller --api`, this will create a controller with the basic CRUD methods which are: index, store, show, update, destroy.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* Create a Model with this command `php artisan make:model <name> -m`, this will create a model and a migration file.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Open the migration file and add the fields you want to the table, like this example:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```php
+public function up()
+{
+    Schema::create('posts', function (Blueprint $table) {
+        $table->id();
+        $table->string('title');
+        $table->text('body');
+        $table->timestamps();
+    });
+}
+```
+* Add the fields to the model, like this example:
 
-## Learning Laravel
+```php
+class Post extends Model
+{
+    protected $fillable = [
+        'title',
+        'body'
+    ];
+}
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* Open the terminal and run this command to create new Database `mysql -u root `, then `create database <name>;` and `exit;`.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* Open the .env file and change the DB_DATABASE to the name you choose.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* Run this command to migrate the tables `php artisan migrate`.
 
-## Laravel Sponsors
+* Open the routes/api.php file and add the routes you want, like this example:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```php
+Route::apiResource('posts', \App\Http\Controllers\PostController::class);
+```
 
-### Premium Partners
+* Open the PostController.php file and add the methods you want, like this example:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```php
+public function index()
+{
+    // here we return all the posts
+    return response()->json([
+        'data'=>Post::all()
+    ]);
+}
 
-## Contributing
+public function store(Request $request)
+{
+    // here we validate the request and put the data in the $input variable
+    $input = $request->validate([
+        'title'=>'required',
+        'body'=>'required'
+    ]);
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    // here we create a new post with the data in the $input variable
+    $post = Post::create($request->all());
 
-## Code of Conduct
+    // here we return a message to the user
+    return response()->json([
+        'message'=>'Post created successfully',
+    ]);
+}
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+public function show($id)
+{
+    // here we return the post with the id we get from the url
+    return response()->json([
+        'data'=>Post::findOrFail($id)
+    ]);
+}
 
-## Security Vulnerabilities
+public function update(Request $request, $id)
+{
+    // here we validate the request and put the data in the $input variable
+    $input = $request->validate([
+        'title'=>'required',
+        'body'=>'required'
+    ]);
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    // here we update the post with the id we get from the url
+    $post = Post::findOrFail($id)->update($input);
 
-## License
+    // here we are returning an updated record
+    return response()->json([
+        'data' => $post,
+    ]);
+}
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# courses
+public function destroy($id)
+{
+    // here we delete the post with the id we get from the url
+    $post = Post::findOrFail($id)->delete();
+
+    // here we are returning a message to the user
+    return response()->json([
+        'message' => 'Post deleted successfully',
+    ]);
+}
+```
