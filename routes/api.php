@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentCourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\TeacherController;
@@ -39,3 +40,7 @@ Route::apiResource('teacher',TeacherController::class);
 
 Route::post('teacher/{teacher_id}/skill',[TeacherSkillController::class,'store']);
 Route::delete('teacher/{teacher_id}/skill/{skill_id}',[TeacherSkillController::class,'destroy']);
+
+
+Route::post('student/{student_id}/teacher/{teacher_id}/course/{course_id}',[StudentCourseController::class,'addStudent']);
+Route::get('student-course',[StudentCourseController::class,'getStudent']);
