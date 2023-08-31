@@ -108,3 +108,45 @@ public function destroy($id)
     ]);
 }
 ```
+
+## Steps to make Custom Requests:
+
+* Create a new Custom Request with this command `php artisan make:request <name>Request`, this will create a new Custom Request.
+
+* Open the Custom Request file and you will find two methods, the first one is authorize, this method is used to authorize the user to make the request, and the second one is rules, this method is used to validate the request, like this example:
+
+```php
+public function authorize()
+{
+    return true;
+}
+
+public function rules()
+{
+    return [
+        'title'=>'required',
+        'body'=>'required'
+    ];
+}
+```
+now you can use this Custom Request in the controller, like this example:
+
+```php
+public function store(PostRequest $request)
+{
+    // here we create a new post with the data in the $input variable
+    $post = Post::create($request->all());
+
+    // here we return a message to the user
+    return response()->json([
+        'message'=>'Post created successfully',
+    ]);
+}
+```
+NOTE: you should add the Custom Request to the controller, like this example:
+
+```php
+use App\Http\Requests\PostRequest;
+```
+
+
