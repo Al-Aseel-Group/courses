@@ -134,8 +134,11 @@ now you can use this Custom Request in the controller, like this example:
 ```php
 public function store(PostRequest $request)
 {
+    // here we validate the request and put the data in the $input variable
+   $input = $request->validated();
+
     // here we create a new post with the data in the $input variable
-    $post = Post::create($request->all());
+    Post::create($input);
 
     // here we return a message to the user
     return response()->json([
