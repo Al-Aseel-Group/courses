@@ -152,4 +152,6 @@ NOTE: you should add the Custom Request to the controller, like this example:
 use App\Http\Requests\PostRequest;
 ```
 
+## Steps to make a new Relationship:
+
 
